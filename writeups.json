@@ -1,0 +1,22 @@
+[
+  {
+    "title": "IDOR in PayPal Leads to Account Takeover",
+    "file": "idor-paypal.html",
+    "date": "2026-06-01",
+    "severity": "Critical",
+    "platform": "HackerOne",
+    "bounty": "$5000",
+    "description": "Insecure Direct Object Reference vulnerability in /api/user endpoint allowing full ATO.",
+    "tags": ["idor", "api", "ato", "p1"]
+  },
+  {
+    "title": "Stored XSS in Shopify Admin Panel",
+    "file": "xss-shopify.html",
+    "date": "2026-05-15",
+    "severity": "High",
+    "platform": "Bugcrowd",
+    "bounty": "$2500",
+    "description": "Stored XSS via SVG upload in product description affecting all store admins.",
+    "tags": ["xss", "stored", "p2"]
+  }
+]

@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OS8086 | Bug Bounty Hunter</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;600;700&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0a0e14;
+            --bg-secondary: #11161d;
+            --card: #1a1f29;
+            --accent: #c0392b;
+            --accent-dim: #a93226;
+            --text: #e6edf3;
+            --text-dim: #8b949e;
+            --critical: #ff4757;
+            --high: #ff6b35;
+            --medium: #ffa502;
+            --low: #26de81;
+            --border: #30363d;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        .mono { font-family: 'JetBrains Mono', monospace; }
+        .container { max-width: 1000px; margin: 0 auto; padding: 0 20px; }
+
+        header {
+            padding: 80px 0 60px;
+            text-align: center;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .glitch {
+            font-size: 3.5rem;
+            font-weight: 700;
+            color: var(--accent);
+            text-shadow: 0 0 20px rgba(192, 57, 43, 0.5);
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: var(--text-dim);
+            margin-bottom: 40px;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .social-links a {
+            background: var(--card);
+            border: 1px solid var(--border);
+            color: var(--text);
+            text-decoration: none;
+            padding: 10px 18px;
+            border-radius: 6px;
+            font-size: 0.95rem;
+            transition: all 0.3s;
+        }
+
+        .social-links a:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+            transform: translateY(-2px);
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            padding: 60px 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .stat-card {
+            background: var(--card);
+            padding: 25px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--accent);
+            display: block;
+        }
+
+        .stat-label {
+            color: var(--text-dim);
+            font-size: 0.9rem;
+            margin-top: 5px;
+        }
+
+        .writeups-section { padding: 60px 0; }
+
+        .section-title {
+            font-size: 2rem;
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .section-title::before {
+            content: ">";
+            color: var(--accent);
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .search-box {
+            width: 100%;
+            background: var(--card);
+            border: 1px solid var(--border);
+            color: var(--text);
+            padding: 14px 20px;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-family: 'Inter', sans-serif;
+            margin-bottom: 30px;
+            transition: all 0.3s;
+        }
+
+        .search-box:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(192, 57, 43, 0.1);
+        }
+
+        .writeups-grid { display: grid; gap: 20px; }
+
+        .writeup-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 25px;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .writeup-card:hover {
+            border-color: var(--accent);
+            transform: translateX(5px);
+            box-shadow: 0 5px 20px rgba(192, 57, 43, 0.15);
+        }
+
+        .writeup-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 15px;
+            gap: 15px;
+        }
+
+        .writeup-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .severity {
+            padding: 4px 12px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        .severity.critical { background: rgba(255, 71, 87, 0.2); color: var(--critical); }
+        .severity.high { background: rgba(255, 107, 53, 0.2); color: var(--high); }
+        .severity.medium { background: rgba(255, 165, 2, 0.2); color: var(--medium); }
+        .severity.low { background: rgba(38, 222, 129, 0.2); color: var(--low); }
+
+        .writeup-meta {
+            display: flex;
+            gap: 20px;
+            color: var(--text-dim);
+            font-size: 0.9rem;
+            margin-bottom: 12px;
+            flex-wrap: wrap;
+        }
+
+        .writeup-desc { color: var(--text-dim); margin-bottom: 15px; }
+
+        .writeup-tags {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .tag {
+            background: var(--bg-secondary);
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            color: var(--text-dim);
+        }
+
+        footer {
+            text-align: center;
+            padding: 40px 0;
+            border-top: 1px solid var(--border);
+            color: var(--text-dim);
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: var(--text-dim);
+        }
+
+        @media (max-width: 768px) {
+            .glitch { font-size: 2.5rem; }
+            .writeup-header { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1 class="glitch mono">OS8086</h1>
+            <p class="subtitle">Bug Bounty Hunter | Security Researcher</p>
+            
+            <div class="social-links">
+                <a href="https://hackerone.com/YOUR_H1" target="_blank">HackerOne</a>
+                <a href="https://bugcrowd.com/YOUR_BC" target="_blank">Bugcrowd</a>
+                <a href="https://github.com/YOUR_GITHUB" target="_blank">GitHub</a>
+                <a href="https://twitter.com/YOUR_TWITTER" target="_blank">Twitter</a>
+                <a href="mailto:contact@os8086.me">Email</a>
+            </div>
+        </header>
+
+        <section class="stats">
+            <div class="stat-card">
+                <span class="stat-number mono" id="totalBugs">0</span>
+                <span class="stat-label">Bugs Reported</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-number mono" id="totalBounty">$0</span>
+                <span class="stat-label">Total Bounty</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-number mono" id="criticalBugs">0</span>
+                <span class="stat-label">Critical/High</span>
+            </div>
+        </section>
+
+        <section class="writeups-section">
+            <h2 class="section-title">Writeups</h2>
+            
+            <input 
+                type="text" 
+                class="search-box" 
+                id="searchBox" 
+                placeholder="Search by company, severity, bug type, tag..."
+            >
+
+            <div class="writeups-grid" id="writeupsContainer">
+                <div class="loading">Loading writeups...</div>
+            </div>
+        </section>
+
+        <footer>
+            <p class="mono">© 2026 OS8086 | Built with <span style="color: var(--accent);"><3</span> for Bug Bounty</p>
+        </footer>
+    </div>
+
+    <script>
+        let allWriteups = [];
+
+        async function loadWriteups() {
+            try {
+                const response = await fetch('./writeups.json');
+                if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                allWriteups = await response.json();
+                
+                // ترتيب تنازلي حسب التاريخ - الجديد الأول
+                allWriteups.sort((a, b) => new Date(b.date) - new Date(a.date));
+                
+                renderWriteups(allWriteups);
+                updateStats(allWriteups);
+            } catch (error) {
+                console.error('Error loading writeups.json:', error);
+                document.getElementById('writeupsContainer').innerHTML = 
+                    `<p style="color: var(--text-dim); text-align: center;">
+                        Error: Could not load writeups.json<br>
+                        <small class="mono">Make sure the file exists and has valid JSON format</small>
+                    </p>`;
+            }
+        }
+
+        function renderWriteups(writeups) {
+            const container = document.getElementById('writeupsContainer');
+            
+            if (writeups.length === 0) {
+                container.innerHTML = '<p style="color: var(--text-dim); text-align: center;">No writeups found.</p>';
+                return;
+            }
+
+            container.innerHTML = writeups.map(w => `
+                <div class="writeup-card" onclick="window.open('./writeups/${w.file}', '_blank')">
+                    <div class="writeup-header">
+                        <h3 class="writeup-title">${w.title}</h3>
+                        <span class="severity ${w.severity.toLowerCase()}">${w.severity}</span>
+                    </div>
+                    <div class="writeup-meta">
+                        <span>${w.date}</span>
+                        <span>${w.platform}</span>
+                        ${w.bounty ? `<span>${w.bounty}</span>` : ''}
+                    </div>
+                    <p class="writeup-desc">${w.description}</p>
+                    <div class="writeup-tags">
+                        ${w.tags.map(tag => `<span class="tag mono">${tag}</span>`).join('')}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function updateStats(writeups) {
+            document.getElementById('totalBugs').textContent = writeups.length;
+            
+            const totalBounty = writeups.reduce((sum, w) => {
+                if (!w.bounty) return sum;
+                const amount = parseInt(w.bounty.replace(/[^0-9]/g, ''));
+                return sum + (isNaN(amount) ? 0 : amount);
+            }, 0);
+            document.getElementById('totalBounty').textContent = '$' + totalBounty.toLocaleString();
+            
+            const criticalHigh = writeups.filter(w => 
+                w.severity.toLowerCase() === 'critical' || w.severity.toLowerCase() === 'high'
+            ).length;
+            document.getElementById('criticalBugs').textContent = criticalHigh;
+        }
+
+        // البحث الذكي
+        document.getElementById('searchBox').addEventListener('input', (e) => {
+            const query = e.target.value.toLowerCase().trim();
+            
+            if (!query) {
+                renderWriteups(allWriteups);
+                return;
+            }
+            
+            const filtered = allWriteups.filter(w => {
+                return w.title.toLowerCase().includes(query) ||
+                       w.severity.toLowerCase().includes(query) ||
+                       w.platform.toLowerCase().includes(query) ||
+                       w.description.toLowerCase().includes(query) ||
+                       w.tags.some(tag => tag.toLowerCase().includes(query));
+            });
+            
+            renderWriteups(filtered);
+        });
+
+        loadWriteups();
+    </script>
+</body>
+</html>
