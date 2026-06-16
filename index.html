@@ -322,7 +322,6 @@
                     <div class="writeup-meta">
                         <span>${w.date}</span>
                         <span>${w.platform}</span>
-                        ${w.bounty ? `<span>${w.bounty}</span>` : ''}
                     </div>
                     <p class="writeup-desc">${w.description}</p>
                     <div class="writeup-tags">
@@ -333,22 +332,23 @@
         }
 
         function updateStats(writeups) {
-            document.getElementById('totalBugs').textContent = writeups.length;
-            
-            const totalBounty = writeups.reduce((sum, w) => {
-                if (!w.bounty) return sum;
-                const amount = parseInt(w.bounty.replace(/[^0-9]/g, ''));
-                return sum + (isNaN(amount) ? 0 : amount);
-            }, 0);
-            document.getElementById('totalBounty').textContent = '$' + totalBounty.toLocaleString();
-            
-            const criticalHigh = writeups.filter(w => 
-                w.severity.toLowerCase() === 'critical' || w.severity.toLowerCase() === 'high'
-            ).length;
-            document.getElementById('criticalBugs').textContent = criticalHigh;
-        }
+    document.getElementById('totalBugs').textContent = writeups.length;
 
-        // البحث الذكي
+    const mediumLow = writeups.filter(w =>
+        w.severity.toLowerCase() === 'medium' ||
+        w.severity.toLowerCase() === 'low'
+    ).length;
+
+    document.getElementById('mediumLowBugs').textContent = mediumLow;
+
+    const criticalHigh = writeups.filter(w =>
+        w.severity.toLowerCase() === 'critical' ||
+        w.severity.toLowerCase() === 'high'
+    ).length;
+
+    document.getElementById('criticalBugs').textContent = criticalHigh;
+    }
+
         document.getElementById('searchBox').addEventListener('input', (e) => {
             const query = e.target.value.toLowerCase().trim();
             
