@@ -1,1 +1,178 @@
-test
+<!-- ========================= -->
+<!-- WRITEUP - OS8086 -->
+<!-- ========================= -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Vertical Authorization Bypass Leading to Privilege Escalation</title>
+
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;600;700&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+<style>
+:root{
+--bg:#0a0e14;
+--bg-secondary:#11161d;
+--card:#1a1f29;
+--accent:#c0392b;
+--text:#e6edf3;
+--text-dim:#8b949e;
+--critical:#ff4757;
+--medium:#ffa502;
+--border:#30363d;
+}
+
+*{margin:0;padding:0;box-sizing:border-box;}
+
+body{
+font-family:'Inter',sans-serif;
+background:var(--bg);
+color:var(--text);
+line-height:1.8;
+}
+
+.container{
+max-width:1000px;
+margin:auto;
+padding:40px 20px;
+}
+
+.title{
+font-size:2.6rem;
+font-weight:700;
+margin-bottom:10px;
+}
+
+.badge{
+display:inline-block;
+background:var(--card);
+border:1px solid var(--border);
+padding:6px 12px;
+border-radius:6px;
+margin-right:8px;
+font-size:.85rem;
+}
+
+.medium{
+color:var(--medium);
+font-weight:700;
+}
+
+.card{
+background:var(--card);
+border:1px solid var(--border);
+border-radius:10px;
+padding:25px;
+margin-top:20px;
+}
+
+.card h2{
+color:var(--accent);
+margin-bottom:10px;
+}
+
+.code{
+background:var(--bg-secondary);
+padding:15px;
+border-radius:8px;
+font-family:monospace;
+overflow:auto;
+}
+
+footer{
+margin-top:40px;
+text-align:center;
+color:var(--text-dim);
+}
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h1 class="title">Vertical Authorization Bypass via Response Manipulation</h1>
+
+<div>
+<span class="badge medium">MEDIUM</span>
+<span class="badge">OPPO Community</span>
+<span class="badge">Authorization</span>
+<span class="badge">2026</span>
+</div>
+
+<div class="card">
+<h2>Overview</h2>
+<p>
+A broken access control vulnerability was identified in OPPO Community that allowed a low-privileged user to manipulate authorization-related values in intercepted responses, resulting in partial privilege escalation behavior.
+<br><br>
+While the issue demonstrated clear authorization weaknesses, the final impact was assessed and classified by the program as Medium severity.
+</p>
+</div>
+
+<div class="card">
+<h2>Affected Component</h2>
+<div class="code">
+https://communityin.oppo.com/user/{UUID}
+</div>
+</div>
+
+<div class="card">
+<h2>Root Cause</h2>
+<p>
+The vulnerability stems from improper handling of authorization state between client and server. Certain role-related values were reflected in responses in a way that allowed manipulation under an intercepting proxy.
+<br><br>
+However, backend enforcement still existed in multiple endpoints, limiting full privilege escalation in the final patched assessment.
+</p>
+</div>
+
+<div class="card">
+<h2>Technical Analysis</h2>
+<p>
+After authentication as a low-privileged user, server responses containing permission-related flags were intercepted and modified.
+<br><br>
+This manipulation affected the client-side privilege representation and, in earlier states of the system, could trigger inconsistent authorization behavior across certain endpoints.
+<br><br>
+Subsequent fixes introduced proper server-side validation, ensuring that unauthorized requests are rejected regardless of client-side manipulation.
+</p>
+</div>
+
+<div class="card">
+<h2>Impact</h2>
+<ul>
+<li>Inconsistent authorization state between client and server</li>
+<li>Potential for temporary privilege confusion in earlier versions</li>
+<li>Access control bypass behavior in partially patched states</li>
+<li>Risk of privilege escalation if server-side validation is absent</li>
+</ul>
+</div>
+
+<div class="card">
+<h2>Proof of Concept</h2>
+<p>
+A low-privileged authenticated user was able to intercept and modify response values related to authorization state using an intercepting proxy. The application reflected elevated UI privileges based on manipulated response data, demonstrating improper trust in client-influenced authorization indicators.
+</p>
+</div>
+
+<div class="card">
+<h2>Recommendations</h2>
+<ul>
+<li>Enforce strict server-side authorization checks for all sensitive actions</li>
+<li>Avoid relying on response-based role indicators for security decisions</li>
+<li>Implement centralized access control enforcement</li>
+<li>Ensure consistent validation across all endpoints</li>
+<li>Maintain audit logs for privilege-related state changes</li>
+</ul>
+</div>
+
+<footer>
+OS8086 • Security Researcher
+</footer>
+
+</div>
+
+</body>
+</html>
