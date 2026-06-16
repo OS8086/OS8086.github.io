@@ -1,22 +1,17 @@
 [
   {
-    "title": "IDOR in PayPal Leads to Account Takeover",
-    "file": "broken access control-oppo.html",
-    "date": "2026-06-01",
-    "severity": "Critical",
+    "title": "Vertical Authorization Bypass Resulting in Unauthorized Administrative Access",
+    "file": "broken-access-control-oppo.html",
+    "date": "2026-05-01",
+    "severity": "Medium",
     "platform": "HackerOne",
-    "bounty": "$5000",
-    "description": "Insecure Direct Object Reference vulnerability in /api/user endpoint allowing full ATO.",
-    "tags": ["idor", "api", "ato", "p1"]
-  },
-  {
-    "title": "Stored XSS in Shopify Admin Panel",
-    "file": "xss-.html",
-    "date": "2026-05-15",
-    "severity": "High",
-    "platform": "Bugcrowd",
-    "bounty": "$2500",
-    "description": "Stored XSS via SVG upload in product description affecting all store admins.",
-    "tags": ["xss", "stored", "p2"]
+    "description": "A server-side authorization flaw in the OPPO Community platform allowed a regular user to manipulate client-side role values and gain unauthorized administrative access.",
+    "tags": [
+      "access-control",
+      "privilege-escalation",
+      "authorization",
+      "api",
+      "p3"
+    ]
   }
 ]
