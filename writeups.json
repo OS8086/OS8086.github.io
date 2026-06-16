@@ -1,7 +1,7 @@
 [
   {
     "title": "IDOR in PayPal Leads to Account Takeover",
-    "file": "idor-paypal.html",
+    "file": "broken access control-oppo.html",
     "date": "2026-06-01",
     "severity": "Critical",
     "platform": "HackerOne",
@@ -11,7 +11,7 @@
   },
   {
     "title": "Stored XSS in Shopify Admin Panel",
-    "file": "xss-shopify.html",
+    "file": "xss-.html",
     "date": "2026-05-15",
     "severity": "High",
     "platform": "Bugcrowd",
